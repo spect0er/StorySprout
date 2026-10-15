@@ -7,6 +7,7 @@ import LoadingSpinner from "../components/Loading";
 import StoryHeader from "../components/StoryHeader";
 import StoryContent from "../components/StoryContent";
 import PersonalMessage from "../components/PersonalMessage";
+import { API_ENDPOINTS } from "../config/api";
 
 
 const StoryResult = () => {
@@ -35,7 +36,7 @@ const StoryResult = () => {
   // ✅ API call
   const generateStoryFromAPI = async () => {
     try {
-      const res = await fetch("http://localhost:8081/api/story/create", {
+      const res = await fetch(API_ENDPOINTS.createStory, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

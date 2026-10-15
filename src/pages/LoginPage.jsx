@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import GoogleLoginButton from "../components/GoogleLoginPage";
 import { googleLogin } from "../components/Firebase";
 import { useNavigate } from "react-router-dom";
-
-const API_BASE = "http://localhost:8081";
+import { API_ENDPOINTS } from "../config/api";
 
 export default function LoginPage({ setUser }) {
   const [email, setEmail] = useState("");
@@ -15,7 +14,7 @@ export default function LoginPage({ setUser }) {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await fetch(`${API_BASE}/api/auth/login`, {
+      const res = await fetch(API_ENDPOINTS.login, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -40,7 +39,7 @@ export default function LoginPage({ setUser }) {
       const userCredential = await googleLogin();
       const idToken = await userCredential.user.getIdToken();
 
-      const res = await fetch(`${API_BASE}/api/auth/google`, {
+      const res = await fetch(API_ENDPOINTS.googleAuth, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ idToken }),

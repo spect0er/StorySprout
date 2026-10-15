@@ -2,6 +2,11 @@ import nodemailer from "nodemailer";
 
 export const sendGiftEmail = async ({ to, subject, html }) => {
   try {
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+      console.warn("⚠️ EMAIL_USER or EMAIL_PASS not configured. Skipping gift email.");
+      return;
+    }
+
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {

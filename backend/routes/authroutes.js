@@ -30,6 +30,7 @@ router.post("/signup", async (req, res) => {
       user: { id: user._id, name: user.name, email: user.email },
     });
   } catch (err) {
+    console.error("Signup error:", err);
     res.status(500).json({ error: "Server error during signup" });
   }
 });
@@ -51,6 +52,7 @@ router.post("/login", async (req, res) => {
       user: { id: user._id, name: user.name, email: user.email },
     });
   } catch (err) {
+    console.error("Login error:", err);
     res.status(500).json({ error: "Server error during login" });
   }
 });
@@ -59,6 +61,11 @@ router.post("/login", async (req, res) => {
 router.post("/google", async (req, res) => {
   const { idToken } = req.body;
   try {
+    if (!admin.apps || !admin.apps.length) {
+      return res.status(500).json({
+        error: "Firebase Admin is not configured on the server. Please check environment variables.",
+      });
+    }
     const decoded = await admin.auth().verifyIdToken(idToken);
     const { uid, email, name, picture } = decoded;
 

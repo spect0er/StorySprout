@@ -1,13 +1,40 @@
 import admin from "firebase-admin";
 
 if (!admin.apps.length) {
-  admin.initializeApp({
-    credential: admin.credential.cert({
-      projectId: process.env.FIREBASE_PROJECT_ID,
-      clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-      privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, "\n"),
-    }),
-  });
+  const projectId = process.env.FIREBASE_PROJECT_ID;
+  const clientEmail = process.env.FIREBASE_CLIENT_EMAIL;
+  let privateKey = process.env.FIREBASE_PRIVATE_KEY;
+
+  if (privateKey) {
+    // Handle escaped newlines commonly required in Vercel / .env files
+    privateKey = privateKey.replace(/\\n/g, "\n");
+    // Strip wrapping quotes if user pasted them into Vercel dashboard
+    if (
+      (privateKey.startsWith('"') && privateKey.endsWith('"')) ||
+      (privateKey.startsWith("'") && privateKey.endsWith("'"))
+    ) {
+      privateKey = privateKey.slice(1, -1);
+    }
+  }
+
+  if (projectId && clientEmail && privateKey) {
+    try {
+      admin.initializeApp({
+        credential: admin.credential.cert({
+          projectId,
+          clientEmail,
+          privateKey,
+        }),
+      });
+      console.log("✅ Firebase Admin initialized successfully");
+    } catch (error) {
+      console.error("❌ Firebase Admin initialization error:", error.message);
+    }
+  } else {
+    console.warn(
+      "⚠️ Firebase Admin credentials missing or incomplete in environment. Google authentication routes will return an error until configured."
+    );
+  }
 }
 
 export default admin;

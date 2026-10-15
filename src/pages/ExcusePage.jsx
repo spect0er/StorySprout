@@ -3,6 +3,7 @@ import brainImage from "../assets/brain.png";
 import { motion } from "framer-motion";
 import { Button } from "../components/button2";
 import axios from "axios";
+import { API_ENDPOINTS } from "../config/api";
 
 export const ExcusePage = () => {
   const [situation, setSituation] = useState("");
@@ -21,7 +22,7 @@ export const ExcusePage = () => {
 
     try {
       setLoading(true);
-      const response = await axios.post("http://localhost:8081/api/excuse", {
+      const response = await axios.post(API_ENDPOINTS.excuse, {
         whatHappened: situation,
         who,
         urgency,

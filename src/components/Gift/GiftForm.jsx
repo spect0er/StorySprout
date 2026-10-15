@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { API_ENDPOINTS } from "../../config/api";
 
 function GiftForm() {
   const [formData, setFormData] = useState({
@@ -31,7 +32,7 @@ function GiftForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch("http://localhost:8081/api/gift/create", {
+      const res = await fetch(API_ENDPOINTS.createGift, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),

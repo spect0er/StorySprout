@@ -4,7 +4,7 @@ import loginIllustration from "../assets/images/login.png";
 import { googleLogin } from "../components/Firebase";
 import GoogleLoginButton from "../components/GoogleLoginPage";
 
-const API_BASE = "http://localhost:8081"; // Change if backend is hosted
+import { API_ENDPOINTS } from "../config/api";
 
 const SignUp = ({ setUser }) => {
   const [name, setName] = useState("");
@@ -17,7 +17,7 @@ const SignUp = ({ setUser }) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await fetch(`${API_BASE}/api/auth/signup`, {
+      const res = await fetch(API_ENDPOINTS.signup, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, password }),
@@ -42,7 +42,7 @@ const SignUp = ({ setUser }) => {
       const userCredential = await googleLogin(); // from Firebase
       const idToken = await userCredential.user.getIdToken();
 
-      const res = await fetch(`${API_BASE}/api/auth/google`, {
+      const res = await fetch(API_ENDPOINTS.googleAuth, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ idToken }),
